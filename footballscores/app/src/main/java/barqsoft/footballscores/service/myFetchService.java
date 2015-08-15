@@ -136,7 +136,7 @@ public class myFetchService extends IntentService
     {
         //JSON data
         final String SERIE_A = "357";
-        final String PREMIER_LEGAUE = "354";
+        final String PREMIER_LEGAUE = "398";
         final String CHAMPIONS_LEAGUE = "362";
         final String PRIMERA_DIVISION = "358";
         final String BUNDESLIGA = "351";
