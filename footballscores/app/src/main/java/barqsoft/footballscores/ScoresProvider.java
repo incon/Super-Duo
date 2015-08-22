@@ -18,6 +18,7 @@ public class ScoresProvider extends ContentProvider
     private static final int MATCHES_WITH_LEAGUE = 101;
     private static final int MATCHES_WITH_ID = 102;
     private static final int MATCHES_WITH_DATE = 103;
+    private static final int LATEST_SCORES = 104;
     private UriMatcher muriMatcher = buildUriMatcher();
     private static final SQLiteQueryBuilder ScoreQuery =
             new SQLiteQueryBuilder();
@@ -26,6 +27,8 @@ public class ScoresProvider extends ContentProvider
             DatabaseContract.scores_table.DATE_COL + " LIKE ?";
     private static final String SCORES_BY_ID =
             DatabaseContract.scores_table.MATCH_ID + " = ?";
+    private static final String HOME_GOAL_NOT = DatabaseContract.scores_table.HOME_GOALS_COL + " != ?";
+    private static final String[] INVALID_GOAL = { "-1" };
 
 
     static UriMatcher buildUriMatcher() {
@@ -35,6 +38,7 @@ public class ScoresProvider extends ContentProvider
         matcher.addURI(authority, "league" , MATCHES_WITH_LEAGUE);
         matcher.addURI(authority, "id" , MATCHES_WITH_ID);
         matcher.addURI(authority, "date" , MATCHES_WITH_DATE);
+        matcher.addURI(authority, "scores", LATEST_SCORES);
         return matcher;
     }
 
@@ -57,6 +61,10 @@ public class ScoresProvider extends ContentProvider
            else if(link.contentEquals(DatabaseContract.scores_table.buildScoreWithLeague().toString()))
            {
                return MATCHES_WITH_LEAGUE;
+           }
+           else if(link.contentEquals(DatabaseContract.scores_table.buildScores().toString()))
+           {
+               return LATEST_SCORES;
            }
         }
         return -1;
@@ -86,6 +94,8 @@ public class ScoresProvider extends ContentProvider
             case MATCHES_WITH_ID:
                 return DatabaseContract.scores_table.CONTENT_ITEM_TYPE;
             case MATCHES_WITH_DATE:
+                return DatabaseContract.scores_table.CONTENT_TYPE;
+            case LATEST_SCORES:
                 return DatabaseContract.scores_table.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri :" + uri );
@@ -118,6 +128,9 @@ public class ScoresProvider extends ContentProvider
             case MATCHES_WITH_LEAGUE: retCursor = mOpenHelper.getReadableDatabase().query(
                     DatabaseContract.SCORES_TABLE,
                     projection,SCORES_BY_LEAGUE,selectionArgs,null,null,sortOrder); break;
+            case LATEST_SCORES: retCursor = mOpenHelper.getReadableDatabase().query(
+                    DatabaseContract.SCORES_TABLE,
+                    projection,HOME_GOAL_NOT,INVALID_GOAL,null,null,DatabaseContract.scores_table.DATE_COL+" DESC"); break;
             default: throw new UnsupportedOperationException("Unknown Uri" + uri);
         }
         retCursor.setNotificationUri(getContext().getContentResolver(),uri);

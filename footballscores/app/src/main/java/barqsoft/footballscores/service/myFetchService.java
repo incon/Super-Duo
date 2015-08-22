@@ -40,7 +40,7 @@ public class myFetchService extends IntentService
     protected void onHandleIntent(Intent intent)
     {
         getData("n2");
-        getData("p2");
+        getData("p7");
 
         return;
     }
@@ -63,7 +63,7 @@ public class myFetchService extends IntentService
             URL fetch = new URL(fetch_build.toString());
             m_connection = (HttpURLConnection) fetch.openConnection();
             m_connection.setRequestMethod("GET");
-            m_connection.addRequestProperty("X-Auth-Token","e136b7858d424b9da07c88f28b61989a");
+            m_connection.addRequestProperty("X-Auth-Token","453c614dd09a4cf283c311dd26038561");
             m_connection.connect();
 
             // Read the input stream into a String
@@ -135,11 +135,11 @@ public class myFetchService extends IntentService
     private void processJSONdata (String JSONdata,Context mContext, boolean isReal)
     {
         //JSON data
-        final String SERIE_A = "357";
+        //final String SERIE_A = "357";
         final String PREMIER_LEGAUE = "398";
-        final String CHAMPIONS_LEAGUE = "362";
-        final String PRIMERA_DIVISION = "358";
-        final String BUNDESLIGA = "351";
+        //final String CHAMPIONS_LEAGUE = "362";
+        //final String PRIMERA_DIVISION = "358";
+        //final String BUNDESLIGA = "351";
         final String SEASON_LINK = "http://api.football-data.org/alpha/soccerseasons/";
         final String MATCH_LINK = "http://api.football-data.org/alpha/fixtures/";
         final String FIXTURES = "fixtures";
@@ -178,11 +178,11 @@ public class myFetchService extends IntentService
                 League = match_data.getJSONObject(LINKS).getJSONObject(SOCCER_SEASON).
                         getString("href");
                 League = League.replace(SEASON_LINK,"");
-                if(     League.equals(PREMIER_LEGAUE)      ||
-                        League.equals(SERIE_A)             ||
-                        League.equals(CHAMPIONS_LEAGUE)    ||
-                        League.equals(BUNDESLIGA)          ||
-                        League.equals(PRIMERA_DIVISION)     )
+                if(League.equals(PREMIER_LEGAUE)) //    ||
+                        //League.equals(SERIE_A)             ||
+                        //League.equals(CHAMPIONS_LEAGUE)    ||
+                        //League.equals(BUNDESLIGA)          ||
+                        //League.equals(PRIMERA_DIVISION)     )
                 {
                     match_id = match_data.getJSONObject(LINKS).getJSONObject(SELF).
                             getString("href");

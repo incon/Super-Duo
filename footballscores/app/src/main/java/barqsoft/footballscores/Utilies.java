@@ -5,52 +5,52 @@ package barqsoft.footballscores;
  */
 public class Utilies
 {
-    public static final int SERIE_A = 357;
-    public static final int PREMIER_LEGAUE = 354;
-    public static final int CHAMPIONS_LEAGUE = 362;
-    public static final int PRIMERA_DIVISION = 358;
-    public static final int BUNDESLIGA = 351;
+    //public static final int SERIE_A = 357;
+    public static final int PREMIER_LEGAUE = 398;
+    //public static final int CHAMPIONS_LEAGUE = 362;
+    //public static final int PRIMERA_DIVISION = 358;
+    //public static final int BUNDESLIGA = 351;
     public static String getLeague(int league_num)
     {
         switch (league_num)
         {
-            case SERIE_A : return "Seria A";
+            //case SERIE_A : return "Seria A";
             case PREMIER_LEGAUE : return "Premier League";
-            case CHAMPIONS_LEAGUE : return "UEFA Champions League";
-            case PRIMERA_DIVISION : return "Primera Division";
-            case BUNDESLIGA : return "Bundesliga";
+            //case CHAMPIONS_LEAGUE : return "UEFA Champions League";
+            //case PRIMERA_DIVISION : return "Primera Division";
+            //case BUNDESLIGA : return "Bundesliga";
             default: return "Not known League Please report";
         }
     }
     public static String getMatchDay(int match_day,int league_num)
     {
-        if(league_num == CHAMPIONS_LEAGUE)
-        {
-            if (match_day <= 6)
-            {
-                return "Group Stages, Matchday : 6";
-            }
-            else if(match_day == 7 || match_day == 8)
-            {
-                return "First Knockout round";
-            }
-            else if(match_day == 9 || match_day == 10)
-            {
-                return "QuarterFinal";
-            }
-            else if(match_day == 11 || match_day == 12)
-            {
-                return "SemiFinal";
-            }
-            else
-            {
-                return "Final";
-            }
-        }
-        else
-        {
+//        if(league_num == CHAMPIONS_LEAGUE)
+//        {
+//            if (match_day <= 6)
+//            {
+//                return "Group Stages, Matchday : 6";
+//            }
+//            else if(match_day == 7 || match_day == 8)
+//            {
+//                return "First Knockout round";
+//            }
+//            else if(match_day == 9 || match_day == 10)
+//            {
+//                return "QuarterFinal";
+//            }
+//            else if(match_day == 11 || match_day == 12)
+//            {
+//                return "SemiFinal";
+//            }
+//            else
+//            {
+//                return "Final";
+//            }
+//        }
+//        else
+//        {
             return "Matchday : " + String.valueOf(match_day);
-        }
+        //}
     }
 
     public static String getScores(int home_goals,int awaygoals)
