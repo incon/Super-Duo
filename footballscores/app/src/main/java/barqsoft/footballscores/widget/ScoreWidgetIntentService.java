@@ -13,6 +13,7 @@ import android.widget.RemoteViews;
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.MainActivity;
 import barqsoft.footballscores.R;
+import barqsoft.footballscores.Utilies;
 import barqsoft.footballscores.scoresAdapter;
 import barqsoft.footballscores.service.myFetchService;
 
@@ -32,13 +33,14 @@ public class ScoreWidgetIntentService extends IntentService {
         getApplicationContext().startService(service_start);
 
         Cursor scores = getApplicationContext().getContentResolver().query(DatabaseContract.scores_table.buildScores(),
-                null,null,null,null);
+                null, null, null, null);
 
         scores.moveToFirst();
-
-
-
-        String lastestScore = scores.getString(scoresAdapter.COL_HOME);
+        String lastestHome = scores.getString(scoresAdapter.COL_HOME);
+        String lastestAway = scores.getString(scoresAdapter.COL_AWAY);
+        Integer lastestScoreHome = scores.getInt(scoresAdapter.COL_HOME_GOALS);
+        Integer lastestScoreAway = scores.getInt(scoresAdapter.COL_AWAY_GOALS);
+        String lastestMatchTime = scores.getString(scoresAdapter.COL_MATCHTIME);
 
 
         // Retrieve all of the Today widget ids: these are the widgets we need to update
@@ -46,18 +48,24 @@ public class ScoreWidgetIntentService extends IntentService {
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
                 ScoreWidgetProvider.class));
 
-        String description = "Clear";
-        // Perform this loop procedure for each Today widget
         for (int appWidgetId : appWidgetIds) {
             int layoutId = R.layout.widget_score_small;
             RemoteViews views = new RemoteViews(getPackageName(), layoutId);
 
+            //views.widget_home_name.setText(cursor.getString(COL_HOME));
+            views.setTextViewText(R.id.widget_home_name, lastestHome);
+            views.setTextViewText(R.id.widget_away_name, lastestAway);
+            views.setTextViewText(R.id.widget_date_textview, lastestMatchTime);
+            views.setTextViewText(R.id.widget_score_textview, Utilies.getScores(lastestScoreHome, lastestScoreAway));
+            views.setImageViewResource(R.id.widget_home_crest, Utilies.getTeamCrestByTeamName(lastestHome));
+            views.setImageViewResource(R.id.widget_away_crest, Utilies.getTeamCrestByTeamName(lastestAway));
+
             // Add the data to the RemoteViews
             // Content Descriptions for RemoteViews were only added in ICS MR1
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                setRemoteContentDescription(views, description);
+                views.setContentDescription(R.id.widget_home_crest, lastestHome);
+                views.setContentDescription(R.id.widget_away_crest, lastestAway);
             }
-            views.setTextViewText(R.id.widget_high_temperature, "Testing");
 
             // Create an Intent to launch MainActivity
             Intent launchIntent = new Intent(this, MainActivity.class);

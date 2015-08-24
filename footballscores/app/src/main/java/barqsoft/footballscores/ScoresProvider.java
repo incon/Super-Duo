@@ -130,7 +130,11 @@ public class ScoresProvider extends ContentProvider
                     projection,SCORES_BY_LEAGUE,selectionArgs,null,null,sortOrder); break;
             case LATEST_SCORES: retCursor = mOpenHelper.getReadableDatabase().query(
                     DatabaseContract.SCORES_TABLE,
-                    projection,HOME_GOAL_NOT,INVALID_GOAL,null,null,DatabaseContract.scores_table.DATE_COL+" DESC"); break;
+                    projection,HOME_GOAL_NOT,INVALID_GOAL,
+                    null,
+                    null,
+                    DatabaseContract.scores_table.DATE_COL+" DESC, "
+                            + DatabaseContract.scores_table.TIME_COL+" DESC"); break;
             default: throw new UnsupportedOperationException("Unknown Uri" + uri);
         }
         retCursor.setNotificationUri(getContext().getContentResolver(),uri);
