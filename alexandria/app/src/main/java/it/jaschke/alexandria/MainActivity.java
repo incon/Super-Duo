@@ -1,5 +1,6 @@
 package it.jaschke.alexandria;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -176,6 +177,26 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             finish();
         }
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == AddBook.REQUEST_BARCODE) {
+            if (data.hasExtra("barcode")) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                String barcode = data.getExtras().getString("barcode");
+                Fragment addBook = new AddBook();
+                Bundle args = new Bundle();
+                args.putString(AddBook.BARCODE, barcode);
+                addBook.setArguments(args);
+                fragmentManager.popBackStack();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, addBook)
+                        .addToBackStack((String) title)
+                        .commit();
+            }
+        }
     }
 
 

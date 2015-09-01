@@ -17,6 +17,7 @@ package it.jaschke.alexandria;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -41,6 +42,7 @@ public final class BarcodeActivity extends Activity {
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
     private GraphicOverlay mGraphicOverlay;
+    private String barcode;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -54,6 +56,8 @@ public final class BarcodeActivity extends Activity {
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
         Context context = getApplicationContext();
 
+        barcode = null;
+
 
         // A barcode detector is created to track barcodes.  An associated multi-processor instance
         // is set to receive the barcode detection results, track the barcodes, and maintain
@@ -64,6 +68,10 @@ public final class BarcodeActivity extends Activity {
             @Override
             public void onFound(String barcodeValue) {
                 Log.d(TAG, "Barcode in Multitracker = " + barcodeValue);
+                barcode = barcodeValue;
+                if (barcode.length() == 13) {
+                    finish();
+                }
             }
         });
 
@@ -144,5 +152,15 @@ public final class BarcodeActivity extends Activity {
             mCameraSource.release();
             mCameraSource = null;
         }
+    }
+
+    @Override
+    public void finish() {
+        if (barcode != null) {
+            Intent data = new Intent();
+            data.putExtra("barcode", barcode);
+            setResult(RESULT_OK, data);
+        }
+        super.finish();
     }
 }

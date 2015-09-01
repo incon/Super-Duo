@@ -28,6 +28,7 @@ import it.jaschke.alexandria.services.DownloadImage;
 public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "INTENT_TO_SCAN_ACTIVITY";
     private EditText ean;
+    private String barcode;
     private final int LOADER_ID = 1;
     private View rootView;
     private final String EAN_CONTENT="eanContent";
@@ -36,7 +37,8 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
     private String mScanFormat = "Format:";
     private String mScanContents = "Contents:";
-
+    public static final int REQUEST_BARCODE = 10;
+    static final String BARCODE = "BARCODE";
 
 
     public AddBook(){
@@ -54,7 +56,15 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_add_book, container, false);
+
         ean = (EditText) rootView.findViewById(R.id.ean);
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            barcode = arguments.getString(BARCODE);
+            ean.setText(barcode);
+            bookSearch(barcode);
+        }
 
         ean.addTextChangedListener(new TextWatcher() {
             @Override
@@ -76,11 +86,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 }
                 //Once we have an ISBN, start a book intent
                 if(ean.length() == 13){
-                    Intent bookIntent = new Intent(getActivity(), BookService.class);
-                    bookIntent.putExtra(BookService.EAN, ean);
-                    bookIntent.setAction(BookService.FETCH_BOOK);
-                    getActivity().startService(bookIntent);
-                    AddBook.this.restartLoader();
+                    bookSearch(barcode);
                 }
             }
         });
@@ -90,7 +96,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             public void onClick(View v) {
                 // Start barcode
                 Intent intent = new Intent(getActivity(), BarcodeActivity.class);
-                startActivity(intent);
+                getActivity().startActivityForResult(intent, REQUEST_BARCODE);
 
             }
         });
@@ -99,6 +105,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             @Override
             public void onClick(View view) {
                 ean.setText("");
+                clearFields();
             }
         });
 
@@ -110,6 +117,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 bookIntent.setAction(BookService.DELETE_BOOK);
                 getActivity().startService(bookIntent);
                 ean.setText("");
+                clearFields();
             }
         });
 
@@ -119,6 +127,14 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         }
 
         return rootView;
+    }
+
+    private void bookSearch(String barcode) {
+        Intent bookIntent = new Intent(getActivity(), BookService.class);
+        bookIntent.putExtra(BookService.EAN, barcode);
+        bookIntent.setAction(BookService.FETCH_BOOK);
+        getActivity().startService(bookIntent);
+        AddBook.this.restartLoader();
     }
 
     private void restartLoader(){
