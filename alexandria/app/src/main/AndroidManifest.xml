@@ -9,6 +9,7 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -21,12 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BarcodeActivity"
-            android:configChanges="orientation"
-            android:label="Barcode" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+        <activity
+            android:name="it.jaschke.alexandria.BarcodeActivity"
+            android:label="Barcode"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:screenOrientation="fullSensor">
         </activity>
         <activity
             android:label="@string/title_activity_settings"
