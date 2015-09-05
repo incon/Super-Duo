@@ -63,8 +63,8 @@ public class ScoreWidgetIntentService extends IntentService {
             // Add the data to the RemoteViews
             // Content Descriptions for RemoteViews were only added in ICS MR1
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                views.setContentDescription(R.id.widget_home_crest, lastestHome);
-                views.setContentDescription(R.id.widget_away_crest, lastestAway);
+                views.setContentDescription(R.id.widget_score_textview, "Score " + Utilies.getScores(lastestScoreHome, lastestScoreAway));
+                views.setContentDescription(R.id.widget_date_textview, "Time " + lastestMatchTime);
             }
 
             // Create an Intent to launch MainActivity
@@ -75,10 +75,5 @@ public class ScoreWidgetIntentService extends IntentService {
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    private void setRemoteContentDescription(RemoteViews views, String description) {
-        //views.setContentDescription(R.id.widget_icon, description);
     }
 }
