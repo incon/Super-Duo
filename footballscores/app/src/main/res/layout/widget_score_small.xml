@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:elevation="4dp"
     android:background="@drawable/list_item"
-    >
+    android:supportsRtl="true">
     <LinearLayout
         android:orientation="horizontal" android:layout_width="match_parent"
         android:layout_height="match_parent"
