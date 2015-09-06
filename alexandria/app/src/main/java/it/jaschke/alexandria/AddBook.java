@@ -79,14 +79,17 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
             @Override
             public void afterTextChanged(Editable s) {
-                String ean =s.toString();
+                String ean = s.toString();
                 //catch isbn10 numbers
+                if (ean.contentEquals("")) {
+                    clearFields();
+                }
                 if(ean.length()==10 && !ean.startsWith("978")){
                     ean="978"+ean;
                 }
                 //Once we have an ISBN, start a book intent
                 if(ean.length() == 13){
-                    bookSearch(barcode);
+                    bookSearch(ean);
                 }
             }
         });
